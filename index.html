@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Pookie Dalli x Laxang 🎀</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --ios-pink: #FF2D55; --hot-pink: #FF006E; --insta-grad: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); }
+        
+        body { margin: 0; background: #FFF0F3; font-family: -apple-system, system-ui; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; transition: background 1s ease; }
+        
+        /* Floating & Shaking Card */
+        .iphone-card {
+            background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(25px); width: 85%; max-width: 380px; 
+            padding: 30px; border-radius: 45px; box-shadow: 0 30px 80px rgba(255, 45, 85, 0.4); 
+            text-align: center; border: 2px solid white; z-index: 100; position: relative;
+            animation: cardFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        
+        /* Vibration Effect for Typing */
+        @keyframes vibrate {
+            0% { transform: translate(0); }
+            25% { transform: translate(2px, -2px); }
+            50% { transform: translate(-2px, 2px); }
+            75% { transform: translate(2px, 2px); }
+            100% { transform: translate(0); }
+        }
+        .shaking { animation: vibrate 0.1s linear infinite !important; }
+
+        .pookie-img { width: 100%; border-radius: 30px; border: 3px solid var(--ios-pink); margin-bottom: 15px; }
+
+        .lyrics-box { background: rgba(255, 45, 85, 0.08); border: 2px dashed var(--ios-pink); padding: 15px; border-radius: 15px; font-size: 15px; margin: 15px 0; font-weight: 700; color: #d63384; line-height: 1.4; }
+        
+        /* The Momo Hunger Meter */
+        .momo-label { font-size: 13px; font-weight: 800; color: var(--ios-pink); margin-bottom: 5px; display: block; }
+        .prog-cont { width: 100%; background: #eee; height: 16px; border-radius: 20px; margin-bottom: 20px; overflow: hidden; border: 1px solid #ddd; }
+        .prog-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #FF2D55, #FF006E); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        input { width: 90%; padding: 18px; border-radius: 25px; border: 3px solid #ffb3c1; font-size: 24px; text-align: center; color: var(--ios-pink); font-weight: 900; background: #fff; }
+
+        .action-btn { background: var(--ios-pink); color: white; padding: 20px; width: 100%; border-radius: 25px; border: none; font-size: 18px; font-weight: 800; cursor: pointer; margin-top: 15px; box-shadow: 0 10px 25px rgba(255, 45, 85, 0.4); }
+
+        .insta-btn { background: var(--insta-grad); color: white; padding: 18px; width: 100%; border-radius: 20px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; display: block; text-decoration: none; }
+
+        /* Floating Objects */
+        .floating { position: absolute; pointer-events: none; animation: fly 3s linear forwards; z-index: 50; }
+        @keyframes fly { 0% { transform: translateY(110vh) scale(0.5); opacity: 1; } 100% { transform: translateY(-20vh) scale(1.5) rotate(360deg); opacity: 0; } }
+        
+        /* Nepali Indie Popups */
+        .maya-popup { 
+            position: absolute; color: var(--hot-pink); font-weight: 800; font-size: 15px; 
+            pointer-events: none; animation: pop 1.8s ease-out forwards; z-index: 200; 
+            white-space: nowrap; text-shadow: 1px 1px 8px rgba(255,255,255,1);
+            font-style: italic;
+        }
+        @keyframes pop { 0% { transform: scale(0); opacity: 0; } 30% { opacity: 1; } 100% { transform: scale(1.4) translateY(-100px); opacity: 0; } }
+
+        .system-status { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 2px; margin-top: 15px; }
+    </style>
+</head>
+<body onload="startMagic()">
+
+    <div class="iphone-card" id="mainCard">
+        <div id="step1">
+            <img src="https://images.squarespace-cdn.com/content/v1/54cc2778e4b025596382b683/10996841-4712-4f81-9972-2435e76d97c7/for+u+my+pookie.png" class="pookie-img">
+            <h1 style="color: var(--ios-pink); margin: 0;">Oi Dalli! 🎀</h1>
+            <p style="font-weight: 700; color: #444; margin-top:10px;">You can't say no baby girl, <br>you don't have any option. 😉</p>
+            <div class="system-status">System Status: 100% Love Detected</div>
+            <button class="action-btn" onclick="nextStep()">TIMRAI HUN MA! 😍</button>
+        </div>
+
+        <div id="step2" style="display:none;">
+            <div class="lyrics-box">
+                🎵 "Timro phone ko number deu malai aaja<br>
+                Garchu ma call sunna tyo mitho aawaj" 🎵
+            </div>
+
+            <label class="momo-label" id="momoLabel">MOMO HUNGER LEVEL: 0% 🥟</label>
+            <div class="prog-cont"><div class="prog-bar" id="bar"></div></div>
+
+            <input type="tel" id="waNumber" placeholder="98XXXXXXXX" maxlength="10" oninput="updateExtreme(this)">
+            
+            <button class="action-btn" onclick="finish()">CALL ME BABY! 📱</button>
+            <div class="system-status">Waiting for Dalli's Input...</div>
+        </div>
+    </div>
+
+    <script>
+        function startMagic() {
+            setInterval(spawn, 300);
+            setInterval(nepaliIndieLyrics, 1000);
+        }
+
+        function nepaliIndieLyrics() {
+            const lines = [
+                "Ranga jastai timi... ❤️",
+                "Himalay jastai sundar... 🏔️",
+                "Aasha ko kiran... ✨",
+                "Timrai huna deu... 🎀",
+                "Najeek aau na... 🎸",
+                "Meri Maya ❤️",
+                "My Universe 🌌",
+                "Laxang's Girl 💍",
+                "Mitho tyo timro boli... 🍬"
+            ];
+            const p = document.createElement('div');
+            p.className = 'maya-popup';
+            p.innerText = lines[Math.floor(Math.random() * lines.length)];
+            p.style.left = Math.random() * 60 + 15 + "vw";
+            p.style.top = Math.random() * 70 + 15 + "vh";
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 1800);
+        }
+
+        function nextStep() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            document.body.style.background = "#FFD1DC";
+            confetti({ particleCount: 200, spread: 70 });
+        }
+
+        function updateExtreme(el) {
+            const val = el.value.length;
+            const bar = document.getElementById('bar');
+            const card = document.getElementById('mainCard');
+            
+            bar.style.width = (val * 10) + "%";
+            document.getElementById('momoLabel').innerText = `MOMO HUNGER LEVEL: ${val * 10}% 🥟`;
+
+            // Love Virus: Background gets more intense
+            const intensity = val * 15;
+            document.body.style.backgroundColor = `rgb(255, ${209 - intensity}, ${220 - (intensity/2)})`;
+
+            // Vibration Engine
+            if(val > 0) {
+                card.classList.add('shaking');
+                spawn(); // Extra hearts when typing
+            } else {
+                card.classList.remove('shaking');
+            }
+        }
+
+        function spawn() {
+            const items = ['💖','🥟','💗','🎀','✨','🎸','🎙️'];
+            const d = document.createElement('div');
+            d.className = 'floating';
+            d.innerHTML = items[Math.floor(Math.random()*items.length)];
+            d.style.left = Math.random() * 100 + "vw";
+            document.body.appendChild(d);
+            setTimeout(() => d.remove(), 3000);
+        }
+
+        function finish() {
+            const num = document.getElementById('waNumber').value;
+            if(num.length < 10) return alert("Dalli, number ta deu! 🤨");
+
+            confetti({ particleCount: 500, spread: 100 });
+            
+            document.getElementById('mainCard').innerHTML = `
+                <h1 style="color:var(--ios-pink)">Sabai Done! 📱</h1>
+                <p style="font-weight:bold; color:#333;">"DM me on Instagram baby, <br>I'm always yours" ❤️</p>
+                <img src="https://media.tenor.com/On7_Zq7U6s0AAAAM/minion-surprised.gif" style="width:130px; border-radius:20px;">
+                
+                <a href="https://instagram.com/laxanggg_" class="insta-btn" target="_blank">
+                    DM Me @laxanggg_ 📸
+                </a>
+            `;
+
+            setTimeout(() => {
+                // Change the 977... number to YOUR number!
+                window.open(`https://wa.me/+61 0423 687 507 ?text=Lau%20mero%20number%20Dalli%20ho%3A%20${num}%20.%20Aba%20call%20gara%20hai!%20❤️`);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
